@@ -89,28 +89,28 @@ public class Main {
             City city = cityDAO.getbyName("Adana");
             session.getTransaction().commit();
 
-            Address newAddress = new Address();
-            newAddress.setAddress("24 sigarlea");
-            newAddress.setDistrict("Manormlas");
-            newAddress.setPostalCode("3024");
-            newAddress.setPhone("+61452222");
-            newAddress.setCity(city);
+            Address address = new Address();
+            address.setAddress("24 sigarlea");
+            address.setDistrict("Manormlas");
+            address.setPostalCode("3024");
+            address.setPhone("+61452222");
+            address.setCity(city);
+            addressDAO.save(address);
 
 
-            Customer newCustomer = new Customer();
-            newCustomer.setFirstName("Gordon");
-            newCustomer.setLastName("Trak");
-            newCustomer.setEmail("info@gmail.com");
-            newCustomer.setAddress(newAddress);
-            newCustomer.setActive(true);
-            newCustomer.setStore(store);
+            Customer customer = new Customer();
+            customer.setFirstName("Gordon");
+            customer.setLastName("Trak");
+            customer.setEmail("info@gmail.com");
+            customer.setAddress(address);
+            customer.setActive(true);
+            customer.setStore(store);
 
-
-
+            session.getTransaction().commit();
+            return customer;
 
         }
 
-        return null;
 
     }
 
