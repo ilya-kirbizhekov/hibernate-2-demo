@@ -1,5 +1,6 @@
 package com.javarush;
 
+import java.time.LocalDateTime;
 import java.util.Properties;
 
 import com.javarush.dao.*;
@@ -77,7 +78,7 @@ public class Main {
     public static void main(String[] args) {
        Main main = new Main();
        Customer customer = main.createCustomer();
-
+       main.customerReturnInventoryToStore();
 
     }
 
@@ -96,6 +97,7 @@ public class Main {
             address.setPostalCode("3024");
             address.setPhone("+61452222");
             address.setCity(city);
+            //address.setLastupdate("2023-10-10");
             addressDAO.save(address);
 
 
@@ -113,6 +115,19 @@ public class Main {
         }
 
 
+    }
+
+    public void customerReturnInventoryToStore() {
+        try (Session session = sessionFactory.getCurrentSession()) {
+          session.beginTransaction();
+
+          Rental rental = rentalDAO.getAnyUnreturned();
+          rental.setRentalDate(LocalDateTime.now());
+          rentalDAO.save(rental);
+          session.getTransaction().commit();
+
+
+        }
     }
 
 
