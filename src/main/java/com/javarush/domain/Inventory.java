@@ -5,6 +5,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "inventory", schema = "movie")
 public class Inventory {
 
     @Id
