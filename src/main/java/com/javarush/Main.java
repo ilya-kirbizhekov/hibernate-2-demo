@@ -2,12 +2,28 @@ package com.javarush;
 
 import java.util.Properties;
 
+import com.javarush.dao.*;
 import com.javarush.domain.*;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Environment;
 import org.hibernate.cfg.Configuration;
 public class Main {
 
+    private final ActorDAO actorDAO;
+    private final AddressDAO addressDAO;
+    private final CategoryDAO categoryDAO;
+    private final CityDAO cityDAO;
+    private final CountryDAO countryDAO;
+    private final CustomerDAO customerDAO;
+    private final FilmDAO filmDAO;
+    private final FilmTextDAO filmTextDAO;
+    private final InventoryDAO inventoryDAO;
+    private final LanguageDAO languageDAO;
+    private final PaymentDAO paymentDAO;
+    private final RentalDAO rentalDAO;
+    private final StaffDAO staffDAO;
+    private final StoreDAO storeDAO;
     private final SessionFactory sessionFactory;
     public Main()
     {
@@ -40,11 +56,62 @@ public class Main {
                 .addAnnotatedClass(Store.class)
                 .buildSessionFactory();
 
+        actorDAO = new ActorDAO(sessionFactory);
+        addressDAO = new AddressDAO(sessionFactory);
+        categoryDAO = new CategoryDAO(sessionFactory);
+        cityDAO = new CityDAO(sessionFactory);
+        countryDAO = new CountryDAO(sessionFactory);
+        customerDAO = new CustomerDAO(sessionFactory);
+        filmDAO = new FilmDAO(sessionFactory);
+        filmTextDAO = new FilmTextDAO(sessionFactory);
+        inventoryDAO = new InventoryDAO(sessionFactory);
+        languageDAO = new LanguageDAO(sessionFactory);
+        paymentDAO = new PaymentDAO(sessionFactory);
+        rentalDAO = new RentalDAO(sessionFactory);
+        staffDAO = new StaffDAO(sessionFactory);
+        storeDAO = new StoreDAO(sessionFactory);
     }
 
 
     public static void main(String[] args) {
        Main main = new Main();
+       Customer customer = main.createCustomer();
+
+
+    }
+
+    private Customer createCustomer() {
+
+        try(Session session = sessionFactory.getCurrentSession()) {
+
+            session.beginTransaction();
+            Store store = storeDAO.getItems(0,1).get(0);
+            City city = cityDAO.getbyName("Adana");
+            session.getTransaction().commit();
+
+            Address newAddress = new Address();
+            newAddress.setAddress("24 sigarlea");
+            newAddress.setDistrict("Manormlas");
+            newAddress.setPostalCode("3024");
+            newAddress.setPhone("+61452222");
+            newAddress.setCity(city);
+
+
+            Customer newCustomer = new Customer();
+            newCustomer.setFirstName("Gordon");
+            newCustomer.setLastName("Trak");
+            newCustomer.setEmail("info@gmail.com");
+            newCustomer.setAddress(newAddress);
+            newCustomer.setActive(true);
+            newCustomer.setStore(store);
+
+
+
+
+        }
+
+        return null;
+
     }
 
 
