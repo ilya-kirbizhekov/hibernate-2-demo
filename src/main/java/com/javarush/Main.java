@@ -46,6 +46,7 @@ public class Main {
                 .addAnnotatedClass(City.class)
                 .addAnnotatedClass(Country.class)
                 .addAnnotatedClass(Customer.class)
+                .addAnnotatedClass(Feature.class)
                 .addAnnotatedClass(Film.class)
                 .addAnnotatedClass(FilmText.class)
                 .addAnnotatedClass(Inventory.class)

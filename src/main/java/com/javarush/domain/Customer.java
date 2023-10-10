@@ -2,7 +2,6 @@ package com.javarush.domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 
@@ -33,7 +32,6 @@ public class Customer {
     private Address address;
 
     @Column(name = "active", columnDefinition = "BIT")
-    @Type(type = "org.hibernate.type.NumbericBooleanType")
     private Boolean isActive;
 
     @Column(name = "create_date")
