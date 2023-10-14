@@ -37,7 +37,7 @@ public class Address {
     private String phone;
 
     @Column(name = "last_update",columnDefinition = "last_update")
-    //@UpdateTimestamp
+    @UpdateTimestamp
     LocalDateTime lastUpdate;
 
     public Short getId() {

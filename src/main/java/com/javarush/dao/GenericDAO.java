@@ -64,7 +64,7 @@ public abstract class GenericDAO<T> {
 //            session.persist(entity);
 //            transaction.commit();
 //        }
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(entity);
         return entity;
     }

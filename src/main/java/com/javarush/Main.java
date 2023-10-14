@@ -2,7 +2,11 @@ package com.javarush;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Year;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import com.javarush.dao.*;
 import com.javarush.domain.*;
@@ -77,10 +81,53 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Main main = new Main();
+       Main main = new Main();
+
        Customer customer = main.createCustomer();
        main.customerReturnInventoryToStore();
        main.customerRentInventory(customer);
+       main.newFilmWasMade();
+
+    }
+
+    private void newFilmWasMade() {
+
+        try (Session session = sessionFactory.getCurrentSession()) {
+
+            session.beginTransaction();
+
+            Language language = languageDAO.getItems(0,20).stream().unordered().findAny().get();
+            List<Category> categories = categoryDAO.getItems(0,5);
+
+            List<Actor> actors = actorDAO.getItems(0,20);
+
+            Film film = new Film();
+            film.setActors(new HashSet<>(actors));
+            film.setRating(Rating.R);
+            film.setSpecialFeatures(Set.of(Feature.TRAILERS));
+            film.setLength((short) 123);
+            film.setReplacementCost(BigDecimal.TWO);
+            film.setRentalRate(BigDecimal.TEN);
+            film.setLanguage(language);
+            film.setDescription("test");
+            film.setTitle("scary");
+            film.setRentalDuration((byte)44);
+            film.setOriginalLanguage(language);
+            film.setCategories(new HashSet<>(categories));
+            film.setReleaseYear(Year.now());
+            filmDAO.save(film);
+
+
+            FilmText filmText = new FilmText();
+            filmText.setFilm(film);
+            filmText.setId((short) 5);
+            filmText.setDescription("sss");
+            filmText.setTitle("ffff");
+            filmTextDAO.save(filmText);
+
+            session.getTransaction().commit();
+
+        }
 
 
     }
@@ -126,26 +173,27 @@ public class Main {
         try(Session session = sessionFactory.getCurrentSession()) {
 
             session.beginTransaction();
+
             Store store = storeDAO.getItems(0,1).get(0);
             City city = cityDAO.getbyName("Adana");
-            session.getTransaction().commit();
+
 
             Address address = new Address();
-            address.setAddress("24 sigarlea"); //
+            address.setAddress("44 sigarlea"); //
             address.setDistrict("Manormlas"); //
             address.setPostalCode("3024"); //
             address.setPhone("+61452222"); //
             address.setCity(city); //
             addressDAO.save(address);
 
-
             Customer customer = new Customer();
-            customer.setFirstName("Gordon");
+            customer.setFirstName("Gordon1");
             customer.setLastName("Trak");
             customer.setEmail("info@gmail.com");
             customer.setAddress(address);
             customer.setActive(true);
             customer.setStore(store);
+            customerDAO.save(customer);
 
             session.getTransaction().commit();
             return customer;
