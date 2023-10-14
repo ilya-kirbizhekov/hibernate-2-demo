@@ -8,7 +8,7 @@ public enum Rating {
     R("R"),
     NC17("NC-17");
 
-    private String value;
+    private final String value;
 
     Rating(String rating) {
         value = rating.toUpperCase();

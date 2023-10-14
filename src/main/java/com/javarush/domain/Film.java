@@ -7,11 +7,15 @@ import jakarta.persistence.*;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import java.math.BigDecimal;
 import java.time.Year;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 @Entity
 @Table(schema = "movie", name = "film")
@@ -52,6 +56,7 @@ public class Film {
     private BigDecimal replacementCost;
 
     @Column(columnDefinition = "enum('G', 'PG', 'PG-13', 'R', 'NC-17')")
+    @Convert(converter = RatingConverter.class)
     private Rating rating;
 
     @Column(name = "special_features",
@@ -162,12 +167,29 @@ public class Film {
         this.rating = rating;
     }
 
-    public String getSpecialFeatures() {
-        return specialFeatures;
+    public Set<Feature> getSpecialFeatures() {
+        if(isNull(specialFeatures) || specialFeatures.isEmpty())
+        {
+            return null;
+        }
+        Set<Feature> result = new HashSet<>();
+        String[] features = specialFeatures.split(",");
+        for (String feature: features){
+            result.add(Feature.getFeatureFromValue(feature));
+        }
+        result.remove(null);
+        return result;
     }
 
-    public void setSpecialFeatures(String specialFeatures) {
-        this.specialFeatures = specialFeatures;
+    public void setSpecialFeatures(Set<Feature> features) {
+        if (isNull(features))
+        {
+            specialFeatures = null;
+
+        } else
+        {
+           specialFeatures =  features.stream().map(Feature::getValue).collect(Collectors.joining(","));
+        }
     }
 
     public LocalDateTime getLastUpdate() {
