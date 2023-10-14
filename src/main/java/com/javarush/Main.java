@@ -74,11 +74,38 @@ public class Main {
         storeDAO = new StoreDAO(sessionFactory);
     }
 
-
     public static void main(String[] args) {
        Main main = new Main();
-       //Customer customer = main.createCustomer();
-       main.customerReturnInventoryToStore();
+       Customer customer = main.createCustomer();
+       //main.customerReturnInventoryToStore();
+       //main.customerRentInventory();
+
+
+    }
+
+    private void customerRentInventory() {
+
+        try (Session session = sessionFactory.getCurrentSession()) {
+
+            session.beginTransaction();
+
+            Film film = filmDAO.getFirstAvailableFilmForRent();
+            Store store = storeDAO.getItems(0,1).get(0);
+            Inventory inventory = new Inventory();
+            inventory.setFilm(film);
+            inventory.setStore(store);
+            inventoryDAO.save(inventory);
+
+            Staff staff = store.getStuff();
+
+
+
+
+
+
+
+            session.getTransaction().commit();
+        }
 
     }
 
@@ -92,11 +119,13 @@ public class Main {
             session.getTransaction().commit();
 
             Address address = new Address();
-            address.setAddress("24 sigarlea");
-            address.setDistrict("Manormlas");
-            address.setPostalCode("3024");
-            address.setPhone("+61452222");
-            address.setCity(city);
+            address.setAddress("24 sigarlea"); //
+            address.setDistrict("Manormlas"); //
+            address.setPostalCode("3024"); //
+            address.setPhone("+61452222"); //
+            address.setCity(city); //
+            String str = "2023-10-13T00:00:00.000";
+            address.setLastUpdate(LocalDateTime.parse(str));
             addressDAO.save(address);
 
 
@@ -121,13 +150,14 @@ public class Main {
           session.beginTransaction();
 
           Rental rental = rentalDAO.getAnyUnreturned();
-          rental.setRentalDate(LocalDateTime.now());
+          rental.setReturnDate(LocalDateTime.now());
           rentalDAO.save(rental);
           session.getTransaction().commit();
 
-
         }
     }
+
+
 
 
 }

@@ -2,8 +2,10 @@ package com.javarush.domain;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,9 +36,9 @@ public class Address {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "last_update", columnDefinition = "timestamp", nullable = false)
-    @UpdateTimestamp
-    private LocalDateTime lastUpdate;
+    @Column(name = "last_update",columnDefinition = "last_update")
+   // @UpdateTimestamp
+    LocalDateTime lastUpdate;
 
     public Short getId() {
         return id;
@@ -97,8 +99,10 @@ public class Address {
     public LocalDateTime getLastupdate() {
         return lastUpdate;
     }
+    public void setLastUpdate(LocalDateTime lastUpdate) {
 
-      public void setLastUpdate(LocalDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
+
+        this.lastUpdate = lastUpdate;  //'2023-10-14T15:47:02.809'
+
     }
 }

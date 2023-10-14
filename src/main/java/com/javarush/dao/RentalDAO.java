@@ -14,7 +14,7 @@ public class RentalDAO extends GenericDAO<Rental> {
     public Rental getAnyUnreturned() {
 
 
-        Query<Rental> query = getSessionFactory().getCurrentSession().createQuery("select r from Rental r where r.rentalDate is null ", Rental.class);
+        Query<Rental> query = getSessionFactory().getCurrentSession().createQuery("select r from Rental r where r.returnDate is null ", Rental.class);
         query.setMaxResults(1);
         return query.getSingleResult();
 

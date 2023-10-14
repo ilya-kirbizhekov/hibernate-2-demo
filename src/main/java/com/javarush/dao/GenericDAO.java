@@ -57,12 +57,16 @@ public abstract class GenericDAO<T> {
         }
     }
 
-    public void save(T t) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.persist(t);
-            transaction.commit();
-        }
+
+    public T save(T entity) {
+//        try (Session session = sessionFactory.openSession()) {
+//            Transaction transaction = session.beginTransaction();
+//            session.persist(entity);
+//            transaction.commit();
+//        }
+        Session session = sessionFactory.openSession();
+        session.saveOrUpdate(entity);
+        return entity;
     }
 
     public void update(T t) {

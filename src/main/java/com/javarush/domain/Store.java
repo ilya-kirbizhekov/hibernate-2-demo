@@ -40,6 +40,11 @@ public class Store {
         return manager;
     }
 
+    public Staff getStuff()
+    {
+        return manager;
+    }
+
     public void setManager(Staff manager) {
         this.manager = manager;
     }
