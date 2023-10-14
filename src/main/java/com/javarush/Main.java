@@ -1,5 +1,6 @@
 package com.javarush;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Properties;
 
@@ -75,15 +76,16 @@ public class Main {
     }
 
     public static void main(String[] args) {
-       Main main = new Main();
+
+        Main main = new Main();
        Customer customer = main.createCustomer();
-       //main.customerReturnInventoryToStore();
-       //main.customerRentInventory();
+       main.customerReturnInventoryToStore();
+       main.customerRentInventory(customer);
 
 
     }
 
-    private void customerRentInventory() {
+    private void customerRentInventory(Customer customer) {
 
         try (Session session = sessionFactory.getCurrentSession()) {
 
@@ -91,6 +93,7 @@ public class Main {
 
             Film film = filmDAO.getFirstAvailableFilmForRent();
             Store store = storeDAO.getItems(0,1).get(0);
+
             Inventory inventory = new Inventory();
             inventory.setFilm(film);
             inventory.setStore(store);
@@ -98,11 +101,20 @@ public class Main {
 
             Staff staff = store.getStuff();
 
+            Rental rental = new Rental();
+            rental.setRentalDate(LocalDateTime.now());
+            rental.setCustomer(customer);
+            rental.setInventory(inventory);
+            rental.setStaff(staff);
+            rentalDAO.save(rental);
 
-
-
-
-
+            Payment payment = new Payment();
+            payment.setRental(rental);
+            payment.setPaymentDate(LocalDateTime.now());
+            payment.setCustomer(customer);
+            payment.setAmount(BigDecimal.valueOf(55.77));
+            payment.setStaff(staff);
+            paymentDAO.save(payment);
 
             session.getTransaction().commit();
         }
@@ -124,8 +136,6 @@ public class Main {
             address.setPostalCode("3024"); //
             address.setPhone("+61452222"); //
             address.setCity(city); //
-            String str = "2023-10-13T00:00:00.000";
-            address.setLastUpdate(LocalDateTime.parse(str));
             addressDAO.save(address);
 
 
